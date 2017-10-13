@@ -18,7 +18,8 @@ public class GridTest {
 
     @Parameterized.Parameters(name = "{0}")
     public static Iterable<Tetramino> dados() {
-        return Arrays.asList(Tetramino.values());
+        return Arrays.asList(Tetramino.T(), Tetramino.J(), Tetramino.L(), Tetramino.QUADRADO(), Tetramino.RETA(),
+                Tetramino.S(), Tetramino.Z());
     }
 
     public GridTest(Tetramino tetraminoAtual) {
@@ -44,6 +45,15 @@ public class GridTest {
         for (int i = 0; i < 100; i++)
             grid.moveDireita();
         Assert.assertEquals(Grid.LARGURA - tetraminoAtual.largura(), grid.getTetraminoInicioAtual());
+    }
+
+    @Test
+    public void rotaciona() {
+        Grid grid = new Grid();
+        grid.coloca(tetraminoAtual);
+        for (int i = 0; i < 100; i++)
+            grid.moveBaixo();
+        grid.rotacionaTetramino();
     }
 
 }

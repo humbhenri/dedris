@@ -7,10 +7,13 @@ package com.example.humbhenri.dedris;
 public class Grid {
     public static final int ALTURA = 20;
     public static final int LARGURA = 10;
+
+    // usa dois grids para facilitar a implementação de limpar antes do tetramino ser movido
     private final int[][] grid; // esse terá somente o grid e as peças já consolidadas
     private final int[][] gridComTetramino; // esse terá o grid com o tetramino atual
-    private int tetraminoAlturaAtual;
-    private int tetraminoInicioAtual;
+
+    private int tetraminoAlturaAtual; // coordenada vertical a partir da qual o tetramino será desenhado
+    private int tetraminoInicioAtual; // coordenada horizontal a partir da qual o tetramino será desenhado
     private Tetramino tetraminoAtual;
 
     public Grid() {
@@ -58,7 +61,13 @@ public class Grid {
     public void rotacionaTetramino() {
         if (tetraminoAtual != null) {
             limpa();
-            tetraminoAtual.rotaciona();
+            tetraminoAtual = tetraminoAtual.rotaciona();
+
+            // faz o tetramino caber inteiro na tela ao rotacionar na base
+            int dif = ALTURA - (tetraminoAlturaAtual + tetraminoAtual.altura());
+            if (dif < 0)
+                tetraminoAlturaAtual += dif;
+
             merge();
         }
     }
