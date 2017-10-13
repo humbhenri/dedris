@@ -14,11 +14,12 @@ class Game extends SurfaceView implements Runnable {
     private final Grid grid;
     private final GridPainter gridPainter;
     private boolean isRunning;
+    private long ultimaVezTetraminoCaiu;
 
     public Game(Context context) {
         super(context);
         grid = new Grid();
-        grid.coloca(Tetramino.QUADRADO);
+        grid.coloca(Tetramino.RETA);
         gridPainter = new GridPainter(grid, new Tela(context));
         setOnTouchListener(new MyGestureListener(context) {
             @Override
@@ -51,7 +52,11 @@ class Game extends SurfaceView implements Runnable {
             Canvas canvas = getHolder().lockCanvas();
 
             gridPainter.draw(canvas);
-//            grid.moveBaixo();
+            long currentTimeMillis = System.currentTimeMillis();
+            if (currentTimeMillis - ultimaVezTetraminoCaiu > 1000) {
+                grid.moveBaixo();
+                ultimaVezTetraminoCaiu = currentTimeMillis;
+            }
 
             getHolder().unlockCanvasAndPost(canvas);
         }
