@@ -13,8 +13,6 @@ import android.view.View;
 class Game extends SurfaceView implements Runnable, View.OnTouchListener {
 
 
-    public static final int ALTURA = 20;
-    public static final int LARGURA = 10;
     private final Grid grid;
     private final GridPainter gridPainter;
     private boolean isRunning;
@@ -22,6 +20,7 @@ class Game extends SurfaceView implements Runnable, View.OnTouchListener {
     public Game(Context context) {
         super(context);
         grid = new Grid();
+        grid.coloca(Tetramino.Z);
         gridPainter = new GridPainter(grid, new Tela(context));
         setOnTouchListener(this);
     }
@@ -50,7 +49,7 @@ class Game extends SurfaceView implements Runnable, View.OnTouchListener {
 
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
-        grid.moveBaixo();
+        grid.rotacionaTetramino();
         return false;
     }
 }

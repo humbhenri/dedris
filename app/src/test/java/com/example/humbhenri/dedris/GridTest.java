@@ -1,5 +1,7 @@
 package com.example.humbhenri.dedris;
 
+import junit.framework.Assert;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -29,6 +31,7 @@ public class GridTest {
         grid.coloca(tetraminoAtual);
         for (int i = 0; i < 100; i++)
             grid.moveBaixo();
+        Assert.assertEquals(Grid.ALTURA - tetraminoAtual.altura(), grid.getAlturaAtual());
     }
 
 }

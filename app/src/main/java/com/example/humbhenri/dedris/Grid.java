@@ -18,7 +18,7 @@ public class Grid {
     }
 
     private void merge() {
-        int[][] gridTetramino = tetraminoAtual.grid();
+        int[][] gridTetramino = tetraminoAtual.grid;
         for (int i=0; i<gridTetramino.length; i++) {
             for (int j = 0; j < tetraminoAtual.altura(); j++) {
                 gridComTetramino[i][j + alturaAtual] = gridTetramino[i][j];
@@ -48,5 +48,17 @@ public class Grid {
         tetraminoAtual = tetramino;
         alturaAtual = 0;
         merge();
+    }
+
+    public int getAlturaAtual() {
+        return alturaAtual;
+    }
+
+    public void rotacionaTetramino() {
+        if (tetraminoAtual != null) {
+            limpa();
+            tetraminoAtual.rotaciona();
+            merge();
+        }
     }
 }
