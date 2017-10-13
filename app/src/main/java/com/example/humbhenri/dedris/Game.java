@@ -36,8 +36,8 @@ class Game extends SurfaceView implements Runnable{
 
             Canvas canvas = getHolder().lockCanvas();
 
-            // desenha tudo
             gridPainter.draw(canvas);
+            grid.moveBaixo();
 
             getHolder().unlockCanvasAndPost(canvas);
         }

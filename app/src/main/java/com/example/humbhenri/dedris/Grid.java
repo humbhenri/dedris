@@ -7,24 +7,44 @@ package com.example.humbhenri.dedris;
 public class Grid {
     public static final int ALTURA = 20;
     public static final int LARGURA = 10;
-    private final int[][] grid;
+    private final int[][] grid; // esse terá somente o grid e as peças já consolidadas
+    private final int[][] gridComTetramino; // esse terá o grid com o tetramino atual
+    private int alturaAtual;
+    private Tetramino tetraminoAtual;
 
     public Grid() {
-        grid = new int[LARGURA][ALTURA];
-        merge(grid, Tetramino.Z);
+        grid = new int[LARGURA][ALTURA + 1]; // uma linha a mais para evitar ArrayIndexOutOfBoundExceptions
+        gridComTetramino = new int[LARGURA][ALTURA + 1];
+        tetraminoAtual = Tetramino.Z;
+        alturaAtual = 0;
+        merge();
     }
 
-    private void merge(int[][] grid, Tetramino tetramino) {
-        int[][] gridTetramino = tetramino.grid();
+    private void merge() {
+        int[][] gridTetramino = tetraminoAtual.grid();
         for (int i=0; i<gridTetramino.length; i++) {
-            for (int j=0; j<gridTetramino[0].length; j++) {
-                grid[i][j] = gridTetramino[i][j];
+            for (int j=0; j<gridTetramino[i].length; j++) {
+                gridComTetramino[i][j + alturaAtual] = gridTetramino[i][j];
             }
         }
     }
 
     public int get(int i, int j) {
-        return grid[i][j];
+        return gridComTetramino[i][j];
     }
 
+    public void moveBaixo() {
+        if (alturaAtual < ALTURA-2) alturaAtual++;
+        System.out.println(alturaAtual);
+        limpa();
+        merge();
+    }
+
+    private void limpa() {
+        for (int i=0; i<grid.length; i++) {
+            for (int j=0; j<grid[0].length; j++) {
+                gridComTetramino[i][j] = grid[i][j];
+            }
+        }
+    }
 }

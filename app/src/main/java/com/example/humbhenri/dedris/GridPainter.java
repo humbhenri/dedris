@@ -32,37 +32,37 @@ public class GridPainter {
         Paint borda = new Paint();
         borda.setStyle(Paint.Style.STROKE);
         borda.setColor(Color.BLACK);
+
+        canvas.drawRect(inicio, 0, larguraPx, alturaPx, borda);
+
         for (int i=0; i<Grid.LARGURA; i++) {
             for (int j=0; j<Grid.ALTURA; j++) {
-                switch (grid.get(i, j)) {
-                    case 1:
-                        quadrado.setColor(Color.CYAN);
-                        break;
-                    case 2:
-                        quadrado.setColor(Color.YELLOW);
-                        break;
-                    case 3:
-                        quadrado.setColor(Color.argb(255, 255, 192, 203));
-                        break;
-                    case 4:
-                        quadrado.setColor(Color.BLUE);
-                        break;
-                    case 5:
-                        quadrado.setColor(Color.argb(255, 255, 153, 0));
-                        break;
-                    case 6:
-                        quadrado.setColor(Color.GREEN);
-                        break;
-                    case 7:
-                        quadrado.setColor(Color.RED);
-                        break;
-                    default:
-                        quadrado.setColor(Color.WHITE);
-                }
+                quadrado.setColor(getColor(i, j));
                 canvas.drawRect(inicio + i*tamanho, j*tamanho, inicio + tamanho + i*tamanho, tamanho + j*tamanho, quadrado);
                 canvas.drawRect(inicio + i*tamanho, j*tamanho, inicio + tamanho + i*tamanho, tamanho + j*tamanho, borda);
                 canvas.drawText(i + ", " + j, inicio + i*tamanho, 20 + j*tamanho, texto);
             }
+        }
+    }
+
+    private int getColor(int i, int j) {
+        switch (grid.get(i, j)) {
+            case 1:
+                return Color.CYAN;
+            case 2:
+                return Color.YELLOW;
+            case 3:
+                return Color.argb(255, 255, 192, 203);
+            case 4:
+                return Color.BLUE;
+            case 5:
+                return Color.argb(255, 255, 153, 0);
+            case 6:
+                return Color.GREEN;
+            case 7:
+                return Color.RED;
+            default:
+                return Color.WHITE;
         }
     }
 }
