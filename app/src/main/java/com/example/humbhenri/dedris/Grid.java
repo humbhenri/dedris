@@ -15,15 +15,12 @@ public class Grid {
     public Grid() {
         grid = new int[LARGURA][ALTURA + 1]; // uma linha a mais para evitar ArrayIndexOutOfBoundExceptions
         gridComTetramino = new int[LARGURA][ALTURA + 1];
-        tetraminoAtual = Tetramino.Z;
-        alturaAtual = 0;
-        merge();
     }
 
     private void merge() {
         int[][] gridTetramino = tetraminoAtual.grid();
         for (int i=0; i<gridTetramino.length; i++) {
-            for (int j=0; j<gridTetramino[i].length; j++) {
+            for (int j = 0; j < tetraminoAtual.altura(); j++) {
                 gridComTetramino[i][j + alturaAtual] = gridTetramino[i][j];
             }
         }
@@ -34,8 +31,7 @@ public class Grid {
     }
 
     public void moveBaixo() {
-        if (alturaAtual < ALTURA-2) alturaAtual++;
-        System.out.println(alturaAtual);
+        if (alturaAtual < ALTURA - tetraminoAtual.altura()) alturaAtual++;
         limpa();
         merge();
     }
@@ -46,5 +42,11 @@ public class Grid {
                 gridComTetramino[i][j] = grid[i][j];
             }
         }
+    }
+
+    public void coloca(Tetramino tetramino) {
+        tetraminoAtual = tetramino;
+        alturaAtual = 0;
+        merge();
     }
 }

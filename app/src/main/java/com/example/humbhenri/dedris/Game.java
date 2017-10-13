@@ -2,19 +2,15 @@ package com.example.humbhenri.dedris;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.util.DisplayMetrics;
-import android.view.Display;
+import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
-import android.view.WindowManager;
 
 /**
  * Created by humbhenri on 12/10/17.
  */
 
-class Game extends SurfaceView implements Runnable{
+class Game extends SurfaceView implements Runnable, View.OnTouchListener {
 
 
     public static final int ALTURA = 20;
@@ -27,6 +23,7 @@ class Game extends SurfaceView implements Runnable{
         super(context);
         grid = new Grid();
         gridPainter = new GridPainter(grid, new Tela(context));
+        setOnTouchListener(this);
     }
 
     @Override
@@ -37,7 +34,7 @@ class Game extends SurfaceView implements Runnable{
             Canvas canvas = getHolder().lockCanvas();
 
             gridPainter.draw(canvas);
-            grid.moveBaixo();
+//            grid.moveBaixo();
 
             getHolder().unlockCanvasAndPost(canvas);
         }
@@ -49,5 +46,11 @@ class Game extends SurfaceView implements Runnable{
 
     public void inicia() {
         isRunning = true;
+    }
+
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        grid.moveBaixo();
+        return false;
     }
 }
