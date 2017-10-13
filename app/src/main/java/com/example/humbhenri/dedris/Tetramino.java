@@ -11,10 +11,8 @@ enum Tetramino {
             {1, 0, 0, 0},
     }),
     QUADRADO(new int[][]{
-            {2, 2, 0, 0},
-            {2, 2, 0, 0},
-            {0, 0, 0, 0},
-            {0, 0, 0, 0},
+            {2, 2},
+            {2, 2},
     }),
     T(new int[][]{
             {3, 0, 0, 0},
@@ -47,8 +45,6 @@ enum Tetramino {
             {0, 0, 0, 0},
     });
 
-    public static final int TAMANHO_GRID = 4;
-
     int[][] grid;
 
     Tetramino(int[][] grid) {
@@ -71,12 +67,27 @@ enum Tetramino {
     }
 
     public void rotaciona() {
-        int[][] novo = new int[TAMANHO_GRID][TAMANHO_GRID];
+        int[][] novo = new int[grid.length][grid[0].length];
         for (int i = 0; i < grid.length; i++) {
             for (int j = 0; j < grid[i].length; j++) {
-                novo[i][j] = grid[TAMANHO_GRID - j - 1][i];
+                novo[i][j] = grid[grid.length - j - 1][i];
             }
         }
         grid = novo;
+    }
+
+    /*
+    *  largura é igual à maior linha que contém um dígito diferente de zero
+    */
+    public int largura() {
+        int largura = 0;
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[0].length; j++) {
+                if (grid[i][j] != 0) {
+                    largura = Math.max(i, largura);
+                }
+            }
+        }
+        return largura + 1;
     }
 }

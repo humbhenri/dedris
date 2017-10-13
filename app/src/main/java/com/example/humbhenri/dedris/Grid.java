@@ -9,19 +9,20 @@ public class Grid {
     public static final int LARGURA = 10;
     private final int[][] grid; // esse terá somente o grid e as peças já consolidadas
     private final int[][] gridComTetramino; // esse terá o grid com o tetramino atual
-    private int alturaAtual;
+    private int tetraminoAlturaAtual;
+    private int tetraminoInicioAtual;
     private Tetramino tetraminoAtual;
 
     public Grid() {
-        grid = new int[LARGURA][ALTURA + 1]; // uma linha a mais para evitar ArrayIndexOutOfBoundExceptions
-        gridComTetramino = new int[LARGURA][ALTURA + 1];
+        grid = new int[LARGURA + 1][ALTURA + 1]; // altura tem uma linha a mais para evitar ArrayIndexOutOfBoundExceptions com retas
+        gridComTetramino = new int[LARGURA + 1][ALTURA + 1];
     }
 
     private void merge() {
         int[][] gridTetramino = tetraminoAtual.grid;
         for (int i=0; i<gridTetramino.length; i++) {
             for (int j = 0; j < tetraminoAtual.altura(); j++) {
-                gridComTetramino[i][j + alturaAtual] = gridTetramino[i][j];
+                gridComTetramino[i + tetraminoInicioAtual][j + tetraminoAlturaAtual] = gridTetramino[i][j];
             }
         }
     }
@@ -31,7 +32,7 @@ public class Grid {
     }
 
     public void moveBaixo() {
-        if (alturaAtual < ALTURA - tetraminoAtual.altura()) alturaAtual++;
+        if (tetraminoAlturaAtual < ALTURA - tetraminoAtual.altura()) tetraminoAlturaAtual++;
         limpa();
         merge();
     }
@@ -46,12 +47,12 @@ public class Grid {
 
     public void coloca(Tetramino tetramino) {
         tetraminoAtual = tetramino;
-        alturaAtual = 0;
+        tetraminoAlturaAtual = 0;
         merge();
     }
 
-    public int getAlturaAtual() {
-        return alturaAtual;
+    public int getTetraminoAlturaAtual() {
+        return tetraminoAlturaAtual;
     }
 
     public void rotacionaTetramino() {
@@ -60,5 +61,25 @@ public class Grid {
             tetraminoAtual.rotaciona();
             merge();
         }
+    }
+
+    public void moveEsquerda() {
+        if (tetraminoAtual != null) {
+            if (tetraminoInicioAtual > 0) tetraminoInicioAtual--;
+            limpa();
+            merge();
+        }
+    }
+
+    public void moveDireita() {
+        if (tetraminoAtual != null) {
+            if (tetraminoInicioAtual + tetraminoAtual.largura() < LARGURA) tetraminoInicioAtual++;
+            limpa();
+            merge();
+        }
+    }
+
+    public int getTetraminoInicioAtual() {
+        return tetraminoInicioAtual;
     }
 }
