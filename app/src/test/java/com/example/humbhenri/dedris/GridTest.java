@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import junit.framework.Assert;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -17,6 +18,7 @@ import java.util.Arrays;
 public class GridTest {
 
     private Tetramino tetraminoAtual;
+    private Grid grid;
 
     @Parameterized.Parameters(name = "{0}")
     public static Iterable<Tetramino> dados() {
@@ -28,9 +30,13 @@ public class GridTest {
         this.tetraminoAtual = tetraminoAtual;
     }
 
+    @Before
+    public void setUp() {
+        grid = new Grid(getCriadorTetramino(), getListener());
+    }
+
     @Test
     public void moveBaixo() {
-        Grid grid = new Grid(getCriadorTetramino(), getListener());
         grid.moveBaixo();
         while (grid.getTetraminoAlturaAtual() > 0) grid.moveBaixo();
         Assert.assertEquals(0, grid.getTetraminoAlturaAtual());
@@ -38,7 +44,6 @@ public class GridTest {
 
     @Test
     public void moveParaLado() {
-        Grid grid = new Grid(getCriadorTetramino(), getListener());
         for (int i = 0; i < 100; i++)
             grid.moveEsquerda();
         Assert.assertEquals(0, grid.getTetraminoInicioAtual());
@@ -49,9 +54,22 @@ public class GridTest {
 
     @Test
     public void rotaciona() {
-        Grid grid = new Grid(getCriadorTetramino(), getListener());
         for (int i = 0; i < Grid.ALTURA; i++)
             grid.moveBaixo();
+        grid.rotacionaTetramino();
+        grid.rotacionaTetramino();
+        grid.rotacionaTetramino();
+        grid.rotacionaTetramino();
+    }
+
+    @Test
+    public void moveParaLadoERotaciona() {
+        for (int i = 0; i < 100; i++) {
+            grid.moveDireita();
+        }
+        grid.rotacionaTetramino();
+        grid.rotacionaTetramino();
+        grid.rotacionaTetramino();
         grid.rotacionaTetramino();
     }
 

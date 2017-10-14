@@ -21,7 +21,6 @@ class Game extends SurfaceView implements Runnable, GridListener {
     public Game(Context context) {
         super(context);
         grid = new Grid(new CriadorTetraminoAleatorio(), this);
-        grid.coloca(Tetramino.Z());
         gridPainter = new GridPainter(grid, new Tela(context));
         setOnTouchListener(new MyGestureListener(context) {
             @Override

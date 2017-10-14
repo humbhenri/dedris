@@ -37,11 +37,6 @@ public class Grid {
     }
 
     private void limpa() {
-        for (int i = 0; i < grid.length; i++) {
-            for (int j = 0; j < grid[0].length; j++) {
-                gridComTetramino[i][j] = grid[i][j];
-            }
-        }
         ArrayUtils.copia(gridComTetramino, grid);
     }
 
@@ -76,15 +71,15 @@ public class Grid {
     }
 
     public void moveEsquerda() {
-        if (tetraminoAtual != null) {
-            if (tetraminoInicioAtual > 0) tetraminoInicioAtual--;
+        if (tetraminoAtual != null && tetraminoInicioAtual > 0) {
+            tetraminoInicioAtual--;
             move();
         }
     }
 
     public void moveDireita() {
-        if (tetraminoAtual != null) {
-            if (tetraminoInicioAtual + tetraminoAtual.largura() < LARGURA) tetraminoInicioAtual++;
+        if (tetraminoAtual != null && tetraminoInicioAtual + tetraminoAtual.largura() < LARGURA) {
+            tetraminoInicioAtual++;
             move();
         }
     }
@@ -106,7 +101,6 @@ public class Grid {
                     return true;
             }
         }
-
         return false;
     }
 
@@ -120,12 +114,6 @@ public class Grid {
         tetraminoAtual = criadorTetramino.proximo();
         tetraminoAlturaAtual = 0;
         tetraminoInicioAtual = 0;
-    }
-
-    public void coloca(Tetramino tetramino) {
-        tetraminoAtual = tetramino;
-        tetraminoAlturaAtual = 0;
-        merge();
     }
 
     public int getTetraminoAlturaAtual() {
