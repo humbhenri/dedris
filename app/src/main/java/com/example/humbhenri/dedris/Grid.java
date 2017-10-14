@@ -16,9 +16,11 @@ public class Grid {
     private int tetraminoInicioAtual; // coordenada horizontal a partir da qual o tetramino será desenhado
     private Tetramino tetraminoAtual;
     private CriadorTetramino criadorTetramino;
+    private GridListener listener;
 
-    public Grid(CriadorTetramino criadorTetramino) {
+    public Grid(CriadorTetramino criadorTetramino, GridListener listener) {
         this.criadorTetramino = criadorTetramino;
+        this.listener = listener;
         grid = new int[LARGURA + 1][ALTURA + 1]; // altura tem uma linha a mais para evitar ArrayIndexOutOfBoundExceptions com retas
         gridComTetramino = new int[LARGURA + 1][ALTURA + 1];
         inicia();
@@ -62,10 +64,14 @@ public class Grid {
     }
 
     public void moveBaixo() {
-        if (tetraminoEncostaPiso() || tetraminoEncostaBlocos())
+        if (tetraminoEncostaBlocos() && tetraminoAlturaAtual == 0) {
+            listener.jogoAcabou();
+            return;
+        } else if (tetraminoEncostaPiso() || tetraminoEncostaBlocos()) {
             tetraminoGruda();
-        else
+        } else {
             tetraminoAlturaAtual++;
+        }
         move();
     }
 
@@ -107,6 +113,7 @@ public class Grid {
     private void tetraminoGruda() {
         ArrayUtils.copia(grid, gridComTetramino);
         inicia();
+        listener.tetraminoGrudou();
     }
 
     private void inicia() {

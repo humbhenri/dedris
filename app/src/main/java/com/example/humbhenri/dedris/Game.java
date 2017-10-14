@@ -2,13 +2,16 @@ package com.example.humbhenri.dedris;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.SurfaceView;
+import android.widget.Toast;
 
 /**
  * Created by humbhenri on 12/10/17.
  */
 
-class Game extends SurfaceView implements Runnable {
+class Game extends SurfaceView implements Runnable, GridListener {
 
     private final Grid grid;
     private final GridPainter gridPainter;
@@ -17,7 +20,7 @@ class Game extends SurfaceView implements Runnable {
 
     public Game(Context context) {
         super(context);
-        grid = new Grid(new CriadorTetraminoAleatorio());
+        grid = new Grid(new CriadorTetraminoAleatorio(), this);
         grid.coloca(Tetramino.Z());
         gridPainter = new GridPainter(grid, new Tela(context));
         setOnTouchListener(new MyGestureListener(context) {
@@ -70,4 +73,19 @@ class Game extends SurfaceView implements Runnable {
         isRunning = true;
     }
 
+    @Override
+    public void tetraminoGrudou() {
+        // TODO
+    }
+
+    @Override
+    public void jogoAcabou() {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(getContext(), "Game Over", Toast.LENGTH_SHORT).show();
+                pause();
+            }
+        });
+    }
 }
