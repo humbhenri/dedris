@@ -10,7 +10,6 @@ import android.view.SurfaceView;
 
 class Game extends SurfaceView implements Runnable {
 
-
     private final Grid grid;
     private final GridPainter gridPainter;
     private boolean isRunning;
@@ -18,7 +17,7 @@ class Game extends SurfaceView implements Runnable {
 
     public Game(Context context) {
         super(context);
-        grid = new Grid();
+        grid = new Grid(new CriadorTetraminoAleatorio());
         grid.coloca(Tetramino.Z());
         gridPainter = new GridPainter(grid, new Tela(context));
         setOnTouchListener(new MyGestureListener(context) {
@@ -52,6 +51,7 @@ class Game extends SurfaceView implements Runnable {
             Canvas canvas = getHolder().lockCanvas();
 
             gridPainter.draw(canvas);
+
             long currentTimeMillis = System.currentTimeMillis();
             if (currentTimeMillis - ultimaVezTetraminoCaiu > 1000) {
                 grid.moveBaixo();

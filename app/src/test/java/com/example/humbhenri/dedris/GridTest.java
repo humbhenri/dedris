@@ -1,5 +1,7 @@
 package com.example.humbhenri.dedris;
 
+import android.support.annotation.NonNull;
+
 import junit.framework.Assert;
 
 import org.junit.Test;
@@ -28,17 +30,15 @@ public class GridTest {
 
     @Test
     public void moveBaixo() {
-        Grid grid = new Grid();
-        grid.coloca(tetraminoAtual);
-        for (int i = 0; i < 100; i++)
-            grid.moveBaixo();
-        Assert.assertEquals(Grid.ALTURA - tetraminoAtual.altura(), grid.getTetraminoAlturaAtual());
+        Grid grid = new Grid(getCriadorTetramino());
+        grid.moveBaixo();
+        while (grid.getTetraminoAlturaAtual() > 0) grid.moveBaixo();
+        Assert.assertEquals(0, grid.getTetraminoAlturaAtual());
     }
 
     @Test
     public void moveParaLado() {
-        Grid grid = new Grid();
-        grid.coloca(tetraminoAtual);
+        Grid grid = new Grid(getCriadorTetramino());
         for (int i = 0; i < 100; i++)
             grid.moveEsquerda();
         Assert.assertEquals(0, grid.getTetraminoInicioAtual());
@@ -49,11 +49,20 @@ public class GridTest {
 
     @Test
     public void rotaciona() {
-        Grid grid = new Grid();
-        grid.coloca(tetraminoAtual);
-        for (int i = 0; i < 100; i++)
+        Grid grid = new Grid(getCriadorTetramino());
+        for (int i = 0; i < Grid.ALTURA; i++)
             grid.moveBaixo();
         grid.rotacionaTetramino();
+    }
+
+    @NonNull
+    private CriadorTetramino getCriadorTetramino() {
+        return new CriadorTetramino() {
+            @Override
+            public Tetramino proximo() {
+                return tetraminoAtual;
+            }
+        };
     }
 
 }
