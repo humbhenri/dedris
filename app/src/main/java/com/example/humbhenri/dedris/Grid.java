@@ -74,6 +74,7 @@ class Grid {
     }
 
     void moveEsquerda() {
+        // TODO detectar se vai encostar num bloco primeiro
         if (tetraminoAtual != null && tetraminoInicioAtual > 0) {
             tetraminoInicioAtual--;
             move();
@@ -81,6 +82,7 @@ class Grid {
     }
 
     void moveDireita() {
+        // TODO detectar se vai encostar num bloco primeiro
         if (tetraminoAtual != null && tetraminoInicioAtual + tetraminoAtual.largura() < LARGURA) {
             tetraminoInicioAtual++;
             move();

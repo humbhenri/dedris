@@ -40,7 +40,7 @@ public class GridPainter {
                 quadrado.setColor(getColor(i, j));
                 canvas.drawRect(inicio + i*tamanho, j*tamanho, inicio + tamanho + i*tamanho, tamanho + j*tamanho, quadrado);
                 canvas.drawRect(inicio + i*tamanho, j*tamanho, inicio + tamanho + i*tamanho, tamanho + j*tamanho, borda);
-                canvas.drawText(i + ", " + j, inicio + i*tamanho, 20 + j*tamanho, texto);
+//                canvas.drawText(i + ", " + j, inicio + i*tamanho, 20 + j*tamanho, texto);
             }
         }
     }
