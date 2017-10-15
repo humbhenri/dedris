@@ -15,13 +15,14 @@ class Game extends SurfaceView implements Runnable, GridListener {
 
     private final Grid grid;
     private final GridPainter gridPainter;
-    private boolean isRunning;
+    private boolean running;
     private long ultimaVezTetraminoCaiu;
 
     public Game(Context context) {
         super(context);
         grid = new Grid(new CriadorTetraminoAleatorio(), this);
-        gridPainter = new GridPainter(grid, new Tela(context));
+        gridPainter = new GridPainter(grid);
+
         setOnTouchListener(new MyGestureListener(context) {
             @Override
             public void onSwipeLeft() {
@@ -47,17 +48,19 @@ class Game extends SurfaceView implements Runnable, GridListener {
 
     @Override
     public void run() {
-        while (isRunning) {
+        while (true) {
             if (!getHolder().getSurface().isValid()) continue;
 
             Canvas canvas = getHolder().lockCanvas();
 
-            gridPainter.draw(canvas);
+            if (running) {
+                gridPainter.draw(canvas);
 
-            long currentTimeMillis = System.currentTimeMillis();
-            if (currentTimeMillis - ultimaVezTetraminoCaiu > 1000) {
-                grid.moveBaixo();
-                ultimaVezTetraminoCaiu = currentTimeMillis;
+                long currentTimeMillis = System.currentTimeMillis();
+                if (currentTimeMillis - ultimaVezTetraminoCaiu > 1000) {
+                    grid.moveBaixo();
+                    ultimaVezTetraminoCaiu = currentTimeMillis;
+                }
             }
 
             getHolder().unlockCanvasAndPost(canvas);
@@ -65,11 +68,11 @@ class Game extends SurfaceView implements Runnable, GridListener {
     }
 
     public void pause() {
-        isRunning = false;
+        running = false;
     }
 
     public void inicia() {
-        isRunning = true;
+        running = true;
     }
 
     @Override
@@ -91,5 +94,9 @@ class Game extends SurfaceView implements Runnable, GridListener {
     @Override
     public void removeuLinha(int linha) {
         // TODO
+    }
+
+    public boolean isRunning() {
+        return running;
     }
 }

@@ -11,19 +11,16 @@ import android.graphics.Paint;
 public class GridPainter {
 
     private final Grid grid;
-    private final Tela tela;
-    private final int tamanho;
 
-    public GridPainter(Grid grid, Tela tela) {
+    public GridPainter(Grid grid) {
         this.grid = grid;
-        this.tela = tela;
-        this.tamanho = (int) Math.floor((float) tela.altura() / (float) Grid.ALTURA);
     }
 
     public void draw(Canvas canvas) {
+        int tamanho = (int) Math.floor((float) canvas.getHeight() / (float) Grid.ALTURA);
         int larguraPx = tamanho * Grid.LARGURA;
         int alturaPx = larguraPx * 2;
-        int inicio = tela.largura() / Grid.LARGURA;
+        int inicio = canvas.getWidth() / Grid.LARGURA;
         Paint texto = new Paint();
         texto.setColor(Color.BLACK);
         texto.setTextSize(30);
