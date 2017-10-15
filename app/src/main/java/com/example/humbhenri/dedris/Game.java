@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.SurfaceView;
 import android.widget.Toast;
 
@@ -12,7 +13,7 @@ import android.widget.Toast;
  */
 
 class Game extends SurfaceView implements Runnable, GridListener {
-
+    private static final String TAG = Game.class.getName();
     private final Grid grid;
     private final GridPainter gridPainter;
     private boolean running;
@@ -26,43 +27,44 @@ class Game extends SurfaceView implements Runnable, GridListener {
         setOnTouchListener(new MyGestureListener(context) {
             @Override
             public void onSwipeLeft() {
-                grid.moveEsquerda();
+                if (running) grid.moveEsquerda();
             }
 
             @Override
             public void onSwipeRight() {
-                grid.moveDireita();
+                if (running) grid.moveDireita();
             }
 
             @Override
             public void onClick() {
-                grid.rotacionaTetramino();
+                if (running) grid.rotacionaTetramino();
             }
 
             @Override
             public void onSwipeDown() {
-                grid.moveBaixo();
+                if (running) grid.moveBaixo();
             }
         });
     }
 
     @Override
     public void run() {
-        while (true) {
+        while (running) {
             if (!getHolder().getSurface().isValid()) continue;
-
             Canvas canvas = getHolder().lockCanvas();
+            gridPainter.draw(canvas);
 
-            if (running) {
-                gridPainter.draw(canvas);
-
-                long currentTimeMillis = System.currentTimeMillis();
-                if (currentTimeMillis - ultimaVezTetraminoCaiu > 1000) {
-                    grid.moveBaixo();
-                    ultimaVezTetraminoCaiu = currentTimeMillis;
-                }
+            long currentTimeMillis = System.currentTimeMillis();
+            if (currentTimeMillis - ultimaVezTetraminoCaiu > 1000) {
+                grid.moveBaixo();
+                ultimaVezTetraminoCaiu = currentTimeMillis;
             }
 
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                Log.e(TAG, e.getMessage());
+            }
             getHolder().unlockCanvasAndPost(canvas);
         }
     }

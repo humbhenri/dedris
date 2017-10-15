@@ -44,6 +44,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     game.pause();
                     startStop.setText(R.string.start);
                 } else {
+                    new Thread(game).start();
                     game.inicia();
                     startStop.setText(R.string.stop);
                 }
