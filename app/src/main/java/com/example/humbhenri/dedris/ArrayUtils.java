@@ -12,4 +12,15 @@ public class ArrayUtils {
             }
         }
     }
+
+    public static void removeColuna(int[][] array, int coluna) {
+        for (int i = coluna; i > 0; i--) {
+            for (int k = 0; k < array.length; k++) {
+                array[k][i] = array[k][i - 1];
+            }
+        }
+        for (int i = 0; i < array.length; i++) {
+            array[i][0] = 0;
+        }
+    }
 }

@@ -8,4 +8,6 @@ interface GridListener {
     void tetraminoGrudou();
 
     void jogoAcabou();
+
+    void removeuLinha(int linha);
 }

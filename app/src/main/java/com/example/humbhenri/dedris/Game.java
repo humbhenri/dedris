@@ -87,4 +87,9 @@ class Game extends SurfaceView implements Runnable, GridListener {
             }
         });
     }
+
+    @Override
+    public void removeuLinha(int linha) {
+        // TODO
+    }
 }

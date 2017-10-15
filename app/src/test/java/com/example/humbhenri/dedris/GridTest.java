@@ -95,6 +95,11 @@ public class GridTest {
             public void jogoAcabou() {
 
             }
+
+            @Override
+            public void removeuLinha(int linha) {
+
+            }
         };
     }
 
