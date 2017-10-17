@@ -57,7 +57,8 @@ class Grid {
                 tetraminoAlturaAtual += dif;
             }
 
-            tetraminoInicioAtual = tetraminoAtual.inicio();
+            // faz o tetramino caber inteiro ao rotacionar no lado
+            tetraminoInicioAtual = Math.max(0, tetraminoInicioAtual);
             move();
         }
     }
@@ -76,8 +77,7 @@ class Grid {
 
     void moveEsquerda() {
         // TODO detectar se vai encostar num bloco primeiro
-        // FIXME ignorar colunas zeradas
-        if (tetraminoAtual != null && tetraminoInicioAtual > 0) {
+        if (tetraminoAtual != null && tetraminoInicioAtual + tetraminoAtual.inicio() > 0) {
             tetraminoInicioAtual--;
             move();
         }

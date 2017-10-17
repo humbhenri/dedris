@@ -16,4 +16,23 @@ public class ArrayUtilsTest {
         Assert.assertArrayEquals(new int[]{0, 4, 5}, array[1]);
         Assert.assertArrayEquals(new int[]{0, 7, 8}, array[2]);
     }
+
+    @Test
+    public void primeiraLinhaNaoNula() {
+        Assert.assertEquals(0, ArrayUtils.primeiraLinhaNaoNula(new int[][]{
+                {0, 1, 0, 0},
+                {0, 1, 0, 0},
+                {0, 1, 0, 0},
+                {0, 1, 0, 0},
+                {0, 1, 0, 0},
+        }));
+
+        Assert.assertEquals(1, ArrayUtils.primeiraLinhaNaoNula(new int[][]{
+                {0, 0, 0, 0},
+                {0, 1, 0, 0},
+                {0, 1, 0, 0},
+                {0, 1, 0, 0},
+                {0, 1, 0, 0},
+        }));
+    }
 }

@@ -23,4 +23,22 @@ public class ArrayUtils {
             array[i][0] = 0;
         }
     }
+
+    /**
+     * Retorna a primeira linha do array 2D que tem um número diferente de zero.
+     *
+     * @param array array intxint
+     * @return coluna 0 .. array.lenght - 1 ou array.length se o array só tem zeros
+     */
+    public static int primeiraLinhaNaoNula(int[][] array) {
+        for (int i = 0; i < array.length; i++) {
+            for (int j = 0; j < array[i].length; j++) {
+                if (array[i][j] != 0) {
+                    return i;
+                }
+            }
+        }
+
+        return array.length; // array só tem zeros
+    }
 }

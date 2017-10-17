@@ -121,4 +121,8 @@ class Tetramino {
     public String toString() {
         return nome;
     }
+
+    public int inicio() {
+        return ArrayUtils.primeiraLinhaNaoNula(this.grid);
+    }
 }

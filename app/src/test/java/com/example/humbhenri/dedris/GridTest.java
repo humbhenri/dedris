@@ -63,9 +63,20 @@ public class GridTest {
     }
 
     @Test
-    public void moveParaLadoERotaciona() {
+    public void moveParaDireitaERotaciona() {
         for (int i = 0; i < 100; i++) {
             grid.moveDireita();
+        }
+        grid.rotacionaTetramino();
+        grid.rotacionaTetramino();
+        grid.rotacionaTetramino();
+        grid.rotacionaTetramino();
+    }
+
+    @Test
+    public void moveParaEsquerdaERotaciona() {
+        for (int i = 0; i < 100; i++) {
+            grid.moveEsquerda();
         }
         grid.rotacionaTetramino();
         grid.rotacionaTetramino();
