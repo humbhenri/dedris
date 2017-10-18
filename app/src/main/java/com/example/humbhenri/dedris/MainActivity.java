@@ -2,14 +2,17 @@ package com.example.humbhenri.dedris;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 
 public class MainActivity extends Activity implements View.OnClickListener {
 
+    public static final String TAG = MainActivity.class.getSimpleName();
     private Game game;
     private Button startStop;
+    private Thread gameThread;
 
 
     @Override
@@ -26,13 +29,19 @@ public class MainActivity extends Activity implements View.OnClickListener {
     @Override
     protected void onResume() {
         super.onResume();
-        new Thread(game).start();
+        gameThread = new Thread(game);
+        gameThread.start();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         game.pause();
+        try {
+            gameThread.join();
+        } catch (InterruptedException e) {
+            Log.e(TAG, e.getMessage());
+        }
     }
 
     @Override

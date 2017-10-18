@@ -10,7 +10,7 @@ import org.junit.runners.Suite;
         GridTestSemParametros.class,
 })
 
-public class Todos {
+public class SuiteTestes {
     // the class remains empty,
     // used only as a holder for the above annotations
 }
