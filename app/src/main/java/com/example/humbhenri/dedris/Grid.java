@@ -11,6 +11,10 @@ class Grid {
     static final int ALTURA = 20;
     static final int LARGURA = 10;
 
+    public enum Direcao {
+        PARA_BAIXO, ESQUERDA, DIREITA
+    }
+
     // usa dois grids para facilitar a implementação de limpar antes do tetramino ser movido
     final int[][] grid; // esse terá somente o grid e as peças já consolidadas
     private final int[][] gridComTetramino; // esse terá o grid com o tetramino atual
@@ -64,10 +68,11 @@ class Grid {
     }
 
     void moveBaixo() {
-        if (tetraminoEncostaBlocos() && tetraminoAlturaAtual == 0) {
+        boolean encostaBlocos = tetraminoEncostaBlocos(Direcao.PARA_BAIXO);
+        if (encostaBlocos && tetraminoAlturaAtual == 0) {
             listener.jogoAcabou();
             return;
-        } else if (tetraminoEncostaPiso() || tetraminoEncostaBlocos()) {
+        } else if (tetraminoEncostaPiso() || encostaBlocos) {
             tetraminoGruda();
         } else {
             tetraminoAlturaAtual++;
@@ -76,19 +81,46 @@ class Grid {
     }
 
     void moveEsquerda() {
-        // TODO detectar se vai encostar num bloco primeiro
-        if (tetraminoAtual != null && tetraminoInicioAtual + tetraminoAtual.inicio() > 0) {
+        if (tetraminoAtual != null
+                && tetraminoInicioAtual + tetraminoAtual.inicio() > 0
+                && !tetraminoEncostaBlocos(Direcao.ESQUERDA)) {
             tetraminoInicioAtual--;
             move();
         }
     }
 
     void moveDireita() {
-        // TODO detectar se vai encostar num bloco primeiro
-        if (tetraminoAtual != null && tetraminoInicioAtual + tetraminoAtual.largura() < LARGURA) {
+        if (tetraminoAtual != null
+                && tetraminoInicioAtual + tetraminoAtual.largura() < LARGURA
+                && !tetraminoEncostaBlocos(Direcao.DIREITA)) {
             tetraminoInicioAtual++;
             move();
         }
+    }
+
+    private boolean tetraminoEncostaBlocos(Direcao direcao) {
+        for (int i = 0; i < tetraminoAtual.grid.length; i++) {
+            for (int j = 0; j < tetraminoAtual.grid[0].length; j++) {
+                switch (direcao) {
+                    case PARA_BAIXO:
+                        if (tetraminoAtual.grid[i][j] != 0 && grid[tetraminoInicioAtual + i][tetraminoAlturaAtual + 1 + j] != 0) {
+                            return true;
+                        }
+                        break;
+                    case ESQUERDA:
+                        if (tetraminoAtual.grid[i][j] != 0 && grid[tetraminoInicioAtual + i - 1][tetraminoAlturaAtual + j] != 0) {
+                            return true;
+                        }
+                        break;
+                    case DIREITA:
+                        if (tetraminoAtual.grid[i][j] != 0 && grid[tetraminoInicioAtual + i + 1][tetraminoAlturaAtual + j] != 0) {
+                            return true;
+                        }
+                        break;
+                }
+            }
+        }
+        return false;
     }
 
     private void move() {
@@ -98,17 +130,6 @@ class Grid {
 
     private boolean tetraminoEncostaPiso() {
         return tetraminoAlturaAtual + tetraminoAtual.altura() == ALTURA;
-    }
-
-    private boolean tetraminoEncostaBlocos() {
-        for (int i = 0; i < tetraminoAtual.grid.length; i++) {
-            for (int j = 0; j < tetraminoAtual.grid[0].length; j++) {
-                // +1 na altura porque eu quero detectar se o próximo movimento p/ baixo vai encostar
-                if (tetraminoAtual.grid[i][j] != 0 && grid[tetraminoInicioAtual + i][tetraminoAlturaAtual + 1 + j] != 0)
-                    return true;
-            }
-        }
-        return false;
     }
 
     private void tetraminoGruda() {
