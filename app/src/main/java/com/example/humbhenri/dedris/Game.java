@@ -8,6 +8,9 @@ import android.util.Log;
 import android.view.SurfaceView;
 import android.widget.Toast;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 /**
  * Created by humbhenri on 12/10/17.
  */
@@ -16,8 +19,10 @@ class Game extends SurfaceView implements Runnable, GridListener {
     private static final String TAG = Game.class.getName();
     private final Grid grid;
     private final GridPainter gridPainter;
-    private boolean running;
+    private volatile boolean running;
     private long ultimaVezTetraminoCaiu;
+    private volatile int intervaloEntreMoveBaixo = 1000;
+    private int intervaloMinimo = 100;
 
     public Game(Context context) {
         super(context);
@@ -42,7 +47,17 @@ class Game extends SurfaceView implements Runnable, GridListener {
 
             @Override
             public void onSwipeDown() {
-                if (running) grid.moveBaixo();
+                if (running) {
+                    grid.moveBaixo();
+                    final int intervaloAnterior = intervaloEntreMoveBaixo;
+                    intervaloEntreMoveBaixo = intervaloMinimo;
+                    new Timer().schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            intervaloEntreMoveBaixo = intervaloAnterior;
+                        }
+                    }, 1000);
+                }
             }
         });
     }
@@ -55,7 +70,7 @@ class Game extends SurfaceView implements Runnable, GridListener {
             gridPainter.draw(canvas);
 
             long currentTimeMillis = System.currentTimeMillis();
-            if (currentTimeMillis - ultimaVezTetraminoCaiu > 1000) {
+            if (currentTimeMillis - ultimaVezTetraminoCaiu > intervaloEntreMoveBaixo) {
                 grid.moveBaixo();
                 ultimaVezTetraminoCaiu = currentTimeMillis;
             }

@@ -33,7 +33,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
     protected void onPause() {
         super.onPause();
         game.pause();
-
     }
 
     @Override
