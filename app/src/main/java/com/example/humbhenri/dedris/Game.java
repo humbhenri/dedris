@@ -23,6 +23,7 @@ class Game extends SurfaceView implements Runnable, GridListener {
     private long ultimaVezTetraminoCaiu;
     private volatile int intervaloEntreMoveBaixo = 1000;
     private int intervaloMinimo = 100;
+    private int intervaloAnterior;
 
     public Game(Context context) {
         super(context);
@@ -49,7 +50,7 @@ class Game extends SurfaceView implements Runnable, GridListener {
             public void onSwipeDown() {
                 if (running) {
                     grid.moveBaixo();
-                    final int intervaloAnterior = intervaloEntreMoveBaixo;
+                    intervaloAnterior = intervaloEntreMoveBaixo;
                     intervaloEntreMoveBaixo = intervaloMinimo;
                     new Timer().schedule(new TimerTask() {
                         @Override
@@ -94,7 +95,8 @@ class Game extends SurfaceView implements Runnable, GridListener {
 
     @Override
     public void tetraminoGrudou() {
-        // TODO
+        // se fez um swipe pra baixo depois do tetramino grudar é melhor voltar à velocidade anterior.
+        intervaloEntreMoveBaixo = intervaloAnterior;
     }
 
     @Override
