@@ -1,5 +1,11 @@
 package com.example.humbhenri.dedris;
 
+import com.example.humbhenri.dedris.eventos.EventoGameOver;
+import com.example.humbhenri.dedris.eventos.EventoLinhaRemovida;
+import com.example.humbhenri.dedris.eventos.EventoTetraminoGrudou;
+
+import org.greenrobot.eventbus.EventBus;
+
 /**
  * Created by humbhenri on 12/10/17.
  * Representa um grid do jogo, onde cada elemento do array é um número que indica a sua cor.
@@ -23,11 +29,9 @@ class Grid {
     private int tetraminoInicioAtual; // coordenada horizontal a partir da qual o tetramino será desenhado
     private Tetramino tetraminoAtual;
     private CriadorTetramino criadorTetramino;
-    private GridListener listener;
 
-    Grid(CriadorTetramino criadorTetramino, GridListener listener) {
+    public Grid(CriadorTetramino criadorTetramino) {
         this.criadorTetramino = criadorTetramino;
-        this.listener = listener;
         grid = new int[LARGURA + 1][ALTURA + 1]; // altura tem uma linha a mais para evitar ArrayIndexOutOfBoundExceptions com retas
         gridComTetramino = new int[LARGURA + 1][ALTURA + 1];
         inicia();
@@ -70,7 +74,7 @@ class Grid {
     void moveBaixo() {
         boolean encostaBlocos = tetraminoEncostaBlocos(Direcao.PARA_BAIXO);
         if (encostaBlocos && tetraminoAlturaAtual == 0) {
-            listener.jogoAcabou();
+            EventBus.getDefault().post(new EventoGameOver());
             return;
         } else if (tetraminoEncostaPiso() || encostaBlocos) {
             tetraminoGruda();
@@ -135,7 +139,7 @@ class Grid {
     private void tetraminoGruda() {
         ArrayUtils.copia(grid, gridComTetramino);
         inicia();
-        listener.tetraminoGrudou();
+        EventBus.getDefault().post(new EventoTetraminoGrudou());
         removeLinhas();
     }
 
@@ -146,7 +150,7 @@ class Grid {
                 preenchido &= grid[j][linhaAtual] != 0;
             }
             if (preenchido) {
-                listener.removeuLinha(linhaAtual);
+                EventBus.getDefault().post(new EventoLinhaRemovida(linhaAtual));
                 ArrayUtils.removeColuna(grid, linhaAtual);
             }
         }

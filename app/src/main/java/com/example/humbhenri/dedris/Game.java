@@ -2,11 +2,17 @@ package com.example.humbhenri.dedris;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 import android.view.SurfaceView;
 import android.widget.Toast;
+
+import com.example.humbhenri.dedris.eventos.EventoGameOver;
+import com.example.humbhenri.dedris.eventos.EventoLinhaRemovida;
+import com.example.humbhenri.dedris.eventos.EventoTetraminoGrudou;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -15,20 +21,20 @@ import java.util.TimerTask;
  * Created by humbhenri on 12/10/17.
  */
 
-class Game extends SurfaceView implements Runnable, GridListener {
+class Game extends SurfaceView implements Runnable {
     private static final String TAG = Game.class.getName();
-    private final Grid grid;
-    private final GridPainter gridPainter;
+    private Grid grid;
+    private GridPainter gridPainter;
     private volatile boolean running;
     private long ultimaVezTetraminoCaiu;
-    private volatile int intervaloEntreMoveBaixo = 1000;
+    private int intervaloEntreMoveBaixo = 1000;
+    private int intervaloAnterior = 1000;
     private int intervaloMinimo = 100;
-    private int intervaloAnterior;
 
     public Game(Context context) {
         super(context);
-        grid = new Grid(new CriadorTetraminoAleatorio(), this);
-        gridPainter = new GridPainter(grid);
+        iniciaGrid();
+        EventBus.getDefault().register(this);
 
         setOnTouchListener(new MyGestureListener(context) {
             @Override
@@ -63,6 +69,11 @@ class Game extends SurfaceView implements Runnable, GridListener {
         });
     }
 
+    private void iniciaGrid() {
+        grid = new Grid(new CriadorTetraminoAleatorio());
+        gridPainter = new GridPainter(grid);
+    }
+
     @Override
     public void run() {
         while (running) {
@@ -93,29 +104,28 @@ class Game extends SurfaceView implements Runnable, GridListener {
         running = true;
     }
 
-    @Override
-    public void tetraminoGrudou() {
+    @Subscribe
+    public void tetraminoGrudou(EventoTetraminoGrudou evento) {
         // se fez um swipe pra baixo depois do tetramino grudar é melhor voltar à velocidade anterior.
         intervaloEntreMoveBaixo = intervaloAnterior;
     }
 
-    @Override
-    public void jogoAcabou() {
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(getContext(), "Game Over", Toast.LENGTH_SHORT).show();
-                pause();
-            }
-        });
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void jogoAcabou(EventoGameOver evento) {
+        Toast.makeText(getContext(), "Game Over", Toast.LENGTH_SHORT).show();
+        pause();
     }
 
-    @Override
-    public void removeuLinha(int linha) {
+    @Subscribe
+    public void removeuLinha(EventoLinhaRemovida evento) {
         // TODO
     }
 
     public boolean isRunning() {
         return running;
+    }
+
+    public void reinicia() {
+        iniciaGrid();
     }
 }
