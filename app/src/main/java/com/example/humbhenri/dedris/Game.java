@@ -30,6 +30,7 @@ class Game extends SurfaceView implements Runnable {
     private int intervaloEntreMoveBaixo = 1000;
     private int intervaloAnterior = 1000;
     private int intervaloMinimo = 100;
+    private boolean gameOver = false;
 
     public Game(Context context) {
         super(context);
@@ -114,6 +115,7 @@ class Game extends SurfaceView implements Runnable {
     public void jogoAcabou(EventoGameOver evento) {
         Toast.makeText(getContext(), "Game Over", Toast.LENGTH_SHORT).show();
         pause();
+        gameOver = true;
     }
 
     @Subscribe
@@ -127,5 +129,11 @@ class Game extends SurfaceView implements Runnable {
 
     public void reinicia() {
         iniciaGrid();
+        gameOver = false;
+        running = true;
+    }
+
+    public boolean isGameOver() {
+        return gameOver;
     }
 }
