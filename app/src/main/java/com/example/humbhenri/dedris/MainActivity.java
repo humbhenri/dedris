@@ -54,7 +54,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
         super.onResume();
         gameThread = new Thread(game);
         gameThread.start();
-        som.toca();
     }
 
     @Override
@@ -66,7 +65,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
         } catch (InterruptedException e) {
             Log.e(TAG, e.getMessage());
         }
-        som.pausa();
     }
 
     @Override
@@ -97,16 +95,19 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private void pausa() {
         game.pause();
         startStop.setText(R.string.start);
+        som.pausa();
     }
 
     private void reinicia() {
         game.reinicia();
         score = 0;
         escreveScore();
+        som.toca();
     }
 
     private void inicia() {
         game.inicia();
+        som.toca();
     }
 
     private void escreveScore() {
