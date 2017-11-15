@@ -40,7 +40,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         som = new Som(getApplicationContext());
         scoreTV = findViewById(R.id.score);
         score = 0;
-        scoreTV.setText(String.valueOf(score));
+        escreveScore();
     }
 
     @Override
@@ -80,19 +80,37 @@ public class MainActivity extends Activity implements View.OnClickListener {
         switch (view.getId()) {
             case R.id.begin:
                 if (game.isRunning()) {
-                    game.pause();
-                    startStop.setText(R.string.start);
+                    pausa();
                 } else {
                     new Thread(game).start();
                     if (game.isGameOver()) {
-                        game.reinicia();
+                        reinicia();
                     } else {
-                        game.inicia();
+                        inicia();
                     }
                     startStop.setText(R.string.stop);
                 }
                 break;
         }
+    }
+
+    private void pausa() {
+        game.pause();
+        startStop.setText(R.string.start);
+    }
+
+    private void reinicia() {
+        game.reinicia();
+        score = 0;
+        escreveScore();
+    }
+
+    private void inicia() {
+        game.inicia();
+    }
+
+    private void escreveScore() {
+        scoreTV.setText(String.valueOf(score));
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -107,6 +125,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     private void atualizaScore(int quantidade) {
         score += 100 * quantidade;
-        scoreTV.setText(String.valueOf(score));
+        escreveScore();
     }
 }
