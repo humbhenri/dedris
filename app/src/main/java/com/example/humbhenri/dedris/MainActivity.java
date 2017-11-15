@@ -8,8 +8,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import com.example.humbhenri.dedris.eventos.EventoGameOver;
+import com.example.humbhenri.dedris.eventos.EventoLinhaRemovida;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -22,7 +24,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private Button startStop;
     private Thread gameThread;
     private Som som;
-
+    private TextView scoreTV;
+    private int score;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -35,6 +38,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
         startStop = findViewById(R.id.begin);
         startStop.setOnClickListener(this);
         som = new Som(getApplicationContext());
+        scoreTV = findViewById(R.id.score);
+        score = 0;
+        scoreTV.setText(String.valueOf(score));
     }
 
     @Override
@@ -92,5 +98,15 @@ public class MainActivity extends Activity implements View.OnClickListener {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void jogoTerminou(EventoGameOver evento) {
         startStop.setText(R.string.start);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void linhaRemovida(EventoLinhaRemovida e) {
+        atualizaScore(e.quantidade);
+    }
+
+    private void atualizaScore(int quantidade) {
+        score += 100 * quantidade;
+        scoreTV.setText(String.valueOf(score));
     }
 }

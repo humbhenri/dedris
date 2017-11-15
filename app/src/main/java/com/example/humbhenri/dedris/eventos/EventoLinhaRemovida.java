@@ -5,9 +5,9 @@ package com.example.humbhenri.dedris.eventos;
  */
 
 public class EventoLinhaRemovida {
-    public final int linhaAtual;
+    public final int quantidade;
 
-    public EventoLinhaRemovida(int linhaAtual) {
-        this.linhaAtual = linhaAtual;
+    public EventoLinhaRemovida(int quantidade) {
+        this.quantidade = quantidade;
     }
 }

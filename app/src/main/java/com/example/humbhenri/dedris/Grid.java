@@ -144,15 +144,19 @@ class Grid {
     }
 
     void removeLinhas() {
+        int linhasRemovidas = 0;
         for (int linhaAtual = ALTURA - 1; linhaAtual >= 0; linhaAtual--) {
             boolean preenchido = true;
             for (int j = 0; j < LARGURA; j++) {
                 preenchido &= grid[j][linhaAtual] != 0;
             }
             if (preenchido) {
-                EventBus.getDefault().post(new EventoLinhaRemovida(linhaAtual));
+                linhasRemovidas++;
                 ArrayUtils.removeColuna(grid, linhaAtual);
             }
+        }
+        if (linhasRemovidas > 0) {
+            EventBus.getDefault().post(new EventoLinhaRemovida(linhasRemovidas));
         }
     }
 
